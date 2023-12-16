@@ -7,17 +7,21 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="chat-container">
-        <input type="text" id="filter-input" placeholder="Filter chat recipients">
-        
-        <div id="chat-list-container">
-            <ul id="chat-list">
-                <!-- Chat list will be dynamically populated using JavaScript -->
-            </ul>
-        </div>
-
-        <div id="right-section">
-            <!-- Right section to display messages -->
+    <div id="container">
+        <div class="chat-container">
+            <div id="chat-list-container">
+                <div class="input-container">
+                    <label>Filter by Title/Order ID</label>
+                    <input type="text" id="filter-input" placeholder="Start typing to search...">
+                </div>
+                <ul id="chat-list">
+                    <!-- Chat list will be dynamically populated using JavaScript -->
+                </ul>
+            </div>
+    
+            <div id="right-section">
+                <!-- Right section to display messages -->
+            </div>
         </div>
     </div>
 

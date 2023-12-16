@@ -22,19 +22,30 @@ document.addEventListener('DOMContentLoaded', function () {
       const listItem = document.createElement('li')
       listItem.classList.add('chat-item')
       listItem.innerHTML = `
-                <img src="${
-                  chat.imageURL
-                }" alt="Profile Picture" class="profile-picture">
-                <div class="recipient-info">
-                    <div class="recipient-name">${chat.title}</div>
-                    <div class="last-message">${getLastMessage(
-                      chat.messageList
-                    )}</div>
-                </div>
-            `
+              <img src="${
+                chat.imageURL
+              }" alt="Profile Picture" class="profile-picture">
+              <div class="recipient-info">
+                  <div class="recipient-name">${chat.title}</div>
+                  <div class="last-message">${getLastMessage(
+                    chat.messageList
+                  )}</div>
+              </div>
+          `
+
+      // Add a click event listener to handle the selection
       listItem.addEventListener('click', () => {
+        // Remove the 'selected' class from all chat items
+        const allChatItems = document.querySelectorAll('.chat-item')
+        allChatItems.forEach((item) => item.classList.remove('selected'))
+
+        // Add the 'selected' class to the clicked chat item
+        listItem.classList.add('selected')
+
+        // Display messages for the selected chat
         displayMessages(chat)
       })
+
       chatList.appendChild(listItem)
     })
   }
@@ -60,14 +71,65 @@ document.addEventListener('DOMContentLoaded', function () {
     // Clear previous messages
     rightSection.innerHTML = ''
 
-    // Display messages in the right section
+    // Create header div
+    const headerDiv = document.createElement('div')
+    headerDiv.classList.add('chat-header')
+
+    // Add profile picture to header
+    const profilePicture = document.createElement('img')
+    profilePicture.src = chat.imageURL
+    profilePicture.alt = 'Profile Picture'
+    profilePicture.classList.add('profile-picture')
+
+    // Add recipient info to header
+    const recipientInfoDiv = document.createElement('div')
+    recipientInfoDiv.classList.add('recipient-info')
+    const recipientNameDiv = document.createElement('div')
+    recipientNameDiv.classList.add('recipient-name')
+    recipientNameDiv.textContent = chat.title
+
+    // Append profile picture and recipient info to header
+    recipientInfoDiv.appendChild(recipientNameDiv)
+    headerDiv.appendChild(profilePicture)
+    headerDiv.appendChild(recipientInfoDiv)
+
+    // Append header to rightSection
+    rightSection.appendChild(headerDiv)
+
+    // Create messages container div
+    const messagesContainerDiv = document.createElement('div')
+    messagesContainerDiv.classList.add('messages-container')
+
+    // Display messages in the messages container
     chat.messageList.forEach((message) => {
       const messageContainer = document.createElement('div')
       messageContainer.classList.add('message-container')
+
+      // Check if the sender is the user
+      if (message.sender === 'USER') {
+        messageContainer.classList.add('sender-message')
+      } else {
+        messageContainer.classList.add('receiver-message')
+      }
+
       messageContainer.innerHTML = `
-                <strong>${message.sender}:</strong> ${message.message}
-            `
-      rightSection.appendChild(messageContainer)
+            <strong>${message.sender}:</strong> ${message.message}
+        `
+      messagesContainerDiv.appendChild(messageContainer)
     })
+
+    // Append messages container to rightSection
+    rightSection.appendChild(messagesContainerDiv)
+
+    const sendMessageField = document.createElement('div')
+    sendMessageField.classList.add('send-message')
+    sendMessageField.innerHTML = `
+        <input type="text" placeholder="Type your message">
+        <button>Send</button>`
+    rightSection.appendChild(sendMessageField)
+
+    // Show the right section
+    chatListContainer.style.flexBasis = '70%' // Adjust the width as needed
+    rightSection.style.display = 'block'
   }
 })
